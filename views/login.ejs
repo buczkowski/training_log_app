@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link 
+    rel="stylesheet" 
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="/styles.css">
+  <title>Training Log - Login</title>
+</head>
+<body>
+  <div class="container">
+    <nav class="navbar navbar-light bg-dark">
+      <h1>Training Log</h1>
+    </nav>
+    <p class="bg-danger">
+      <% if (messages.error) { %>
+      <%= messages.error; %>
+      <% } %>
+    </p>
+    <fieldset>
+      <legend>Login</legend>
+      <form class="form-horizontal" action="/login" method="POST">
+        <div class="form-group">
+          <label class="col-sm-2 col-form-label col-form-label-sm" for="email">Email:</label>
+          <input class="form-control-sm" type="email" id="email" name="email" required>        
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 col-form-label col-form-label-sm" for="password">Password:</label>
+          <input class="form-control-sm" type="password" id="password" name="password" required>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" type="submit">Login</button>
+        </div>
+      </form>
+    </fieldset>
+    <p><a href="/register">Register</a> if you do not have an account.</p>
+    <footer>
+      <p>Copyright &copy; 2020 Phil Buczkowski</p>
+      <p><a href="mailto:phil@buczkowski.us">phil@buczkowski.us</a></p>
+    </footer>
+  </div>
+</body>
+</html>
+

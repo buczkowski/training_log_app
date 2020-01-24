@@ -1,0 +1,33 @@
+html {
+  height: 100%;
+}
+body {
+  background-color: whitesmoke;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+h1 {
+  /*font-weight: bold;*/
+  text-align: center;
+  color: whitesmoke;
+}
+label {
+  text-align: left;
+}
+footer {
+  padding-top: 50px;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;   
+  font-size: .75em;
+}
+.container {
+  width: 98%;
+  text-align: center;
+}
+.form-group {
+  margin-left: auto;
+}
+.timer {
+  padding-bottom: 20px;
+}

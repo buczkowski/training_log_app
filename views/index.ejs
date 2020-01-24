@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link 
+    rel="stylesheet" 
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+    crossorigin="anonymous">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css">
+  <title>Training Log - <%= name %></title>
+</head>
+<body>
+  <div class="container">
+    <div>
+      <nav class="navbar navbar-light bg-dark">
+      <h1>Training log - <%= name %></h1>
+      <form class="form-horizontal" action="/logout?_method=DELETE" method="POST">
+        <div class="form-group">
+          <button class="btn btn-secondary" type="submit">Log Out</button>
+        </div>
+      </form>
+    </nav>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <fieldset>
+            <legend>Add an Exercise</legend>
+            <form class="form-horizontal" action="/addexercise" method="POST">
+              <div class="form-group">
+                <label class="col-sm-2 col-form-label col-form-label-sm" for="exercise">Exercise:</label>
+                <input class="form-control-sm" type="text" name="exercise" required>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 col-form-label col-form-label-sm" for="sets">Sets:</label>
+                <input class="form-control-sm" type="number" name="sets">
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 col-form-label col-form-label-sm" for="reps">Reps:</label>
+                <input class="form-control-sm" type="number" name="reps">
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 col-form-label col-form-label-sm" for="weight">Weight:</label>
+                <input class="form-control-sm" type="text" name="weight">
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 col-form-label col-form-label-sm" for="date">Date:</label>
+                <input class="form-control-sm" type="date" name="date" required>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-primary" type="submit">Add Exercise</button>
+              </div>
+            </form>
+          </fieldset>
+        </div>
+        <div class="col-md-6">
+          <fieldset>
+            <legend>Interval Timer</legend>
+            <div class="timer">
+              <div class="controls">
+                <input id="duration" value="180" />
+                <div>
+                  <button id="start"><i class="fas fa-play"></i></button>
+                  <button id="pause"><i class="fas fa-pause"></i></button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+    <table class="table table-striped table-sm">
+      <tr>
+        <thead class="thead-dark">
+          <th scope="col">Exercise</th>
+          <th scope="col">Sets</th>
+          <th scope="col">Reps</th>
+          <th scope="col">Weight (lbs)</th>
+          <th colspan="2" scope="col">Date</th>
+        </thead>
+      </tr>
+        <% for (let completedExercise of exercisesList) { %>
+          <tr>
+            <td><%= completedExercise.exercise %></td>
+            <td><%= completedExercise.sets %></td>
+            <td><%= completedExercise.reps %></td>
+            <td><%= completedExercise.weight %></td>
+            <td><%= completedExercise.date %></td>
+            <form action="/deleteexercise" method="POST">
+              <input hidden name="exerciseId" value="<%= completedExercise.exerciseId %>">
+              <td><button class="btn btn-danger type="submit">Delete</button></td>
+            </form>
+          </tr>
+        <% } %>
+    </table>
+    <% if (isPrevious) { %>
+      <% let previousPage = parseInt(currentPage) - 1; %>
+      <a href="/?currentPage=<%= previousPage %>"><i class="fas fa-arrow-circle-left"></i></a>
+    <% } %>
+    <% if (isNext) { %>
+      <% let nextPage = parseInt(currentPage) + 1; %>
+       <a href="/?currentPage=<%= nextPage %>"><i class="fas fa-arrow-circle-right"></i></a>
+    <% } %> 
+    <br><br>
+    <footer>
+      <p>Copyright &copy; 2020 Phil Buczkowski</p>
+      <p><a href="mailto:phil@buczkowski.us">phil@buczkowski.us</a></p>
+    </footer>
+  </div>
+  <script src="timer.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
+
