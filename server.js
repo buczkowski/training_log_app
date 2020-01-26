@@ -21,6 +21,24 @@ initializePassport(
   id => users.find(user => user.id === id)
 );
 
+app.use(express.static('public'))
+app.set('view-engine', 'ejs');
+app.use(express.urlencoded({ extended: false }));
+app.use(flash());
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(methodOverride('_method'));
+app.use(require('connect-flash')());
+app.use(function (req, res, next) {
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
+
 // Users will be stored in users.json. Create it
 // if it doesn't exist and load it into memory.
 const usersFile = './data/users.json';
@@ -41,33 +59,15 @@ try {
 }
 let exercises = JSON.parse(fs.readFileSync(exercisesFile, { encoding: 'utf8' }));
 
-app.use(express.static('public'))
-app.set('view-engine', 'ejs');
-app.use(express.urlencoded({ extended: false }));
-app.use(flash());
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: true,
-  saveUninitialized: true
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(methodOverride('_method'));
-app.use(require('connect-flash')());
-app.use(function (req, res, next) {
-  res.locals.messages = require('express-messages')(req, res);
-  next();
-});
-
+// routes
 app.get('/', checkAuthenticated, (req, res) => {
   const completedExercises = exercises.filter(exercise => {
     return exercise.userId == req.user.id;
   });
   arraySort(completedExercises, 'date', {reverse: true});
 
-  /* 
-  Pagination code here
-  */
+   
+  //Pagination
   const pageSize = 10;
   let exercisesArray = [];
   let exercisesList = [];
@@ -116,7 +116,7 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
   res.render('register.ejs');
 });
 
-app.post('/register', checkNotAuthenticated, checkEmailUsed, async (req, res) => {
+app.post('/register', checkNotAuthenticated, checkEmailUsed, checkPasswordGood, async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     users.push({ 
@@ -192,6 +192,47 @@ function checkEmailUsed(req, res, next) {
   }
   if (emailList.find(e => e === req.body.email)) {
     req.flash('error', `The email ${req.body.email} is already in use.`);
+    return res.render('register.ejs');
+  }
+  next();
+}
+
+// check if the password is at least 8 characters, 
+// contains a capital letter, lowercase letter and a number
+function checkPasswordGood(req, res, next) {
+  const reCapital = /[A-Z]/.test(req.body.password);
+  const reLower = /[a-z]/.test(req.body.password);
+  const reNumber = /[0-9]/.test(req.body.password);
+  if (req.body.password.length < 8) {
+    req.flash('error', `
+      The password you entered was not long enough.
+      Make sure you use at least 8 characters, at least one lower case letter,
+      at least one upper case letter and at least one number.
+    `);
+    return res.render('register.ejs');
+  } 
+  if (!reCapital) {
+    req.flash('error', `
+      The password must contain at least one capital letter.
+      Make sure you use at least 8 characters, at least one lower case letter,
+      at least one upper case letter and at least one number.
+    `);
+    return res.render('register.ejs');
+  }
+  if (!reLower) {
+    req.flash('error', `
+      The password must contain at least one lower case letter.
+      Make sure you use at least 8 characters, at least one lower case letter,
+      at least one upper case letter and at least one number.
+    `);
+    return res.render('register.ejs');
+  }
+  if (!reNumber) {
+    req.flash('error', `
+      The password must contain at least one number.
+      Make sure you use at least 8 characters, at least one lower case letter,
+      at least one upper case letter and at least one number.
+    `);
     return res.render('register.ejs');
   }
   next();

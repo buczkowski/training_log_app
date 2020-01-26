@@ -13,6 +13,9 @@ h1 {
 label {
   text-align: left;
 }
+fieldset {
+  padding-bottom: 20px;
+}
 footer {
   padding-top: 50px;
   left: 0;
