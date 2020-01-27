@@ -12,7 +12,6 @@ const methodOverride = require('method-override');
 const fs = require('fs');
 const uuidv1 = require('uuid/v1');
 const arraySort = require('array-sort');
-const { check, body, validationResult } = require('express-validator');
 
 const initializePassport = require('./passport-config');
 initializePassport(
@@ -66,7 +65,6 @@ app.get('/', checkAuthenticated, (req, res) => {
   });
   arraySort(completedExercises, 'date', {reverse: true});
 
-   
   //Pagination
   const pageSize = 10;
   let exercisesArray = [];
@@ -203,35 +201,36 @@ function checkPasswordGood(req, res, next) {
   const reCapital = /[A-Z]/.test(req.body.password);
   const reLower = /[a-z]/.test(req.body.password);
   const reNumber = /[0-9]/.test(req.body.password);
+  const reminder = `
+    Make sure you use at least 8 characters, 
+    at least one lower case letter,
+    at least one upper case letter and at least one number.
+  `;
   if (req.body.password.length < 8) {
     req.flash('error', `
       The password you entered was not long enough.
-      Make sure you use at least 8 characters, at least one lower case letter,
-      at least one upper case letter and at least one number.
+      ${reminder}
     `);
     return res.render('register.ejs');
   } 
   if (!reCapital) {
     req.flash('error', `
       The password must contain at least one capital letter.
-      Make sure you use at least 8 characters, at least one lower case letter,
-      at least one upper case letter and at least one number.
+      ${reminder}
     `);
     return res.render('register.ejs');
   }
   if (!reLower) {
     req.flash('error', `
       The password must contain at least one lower case letter.
-      Make sure you use at least 8 characters, at least one lower case letter,
-      at least one upper case letter and at least one number.
+      ${reminder}
     `);
     return res.render('register.ejs');
   }
   if (!reNumber) {
     req.flash('error', `
       The password must contain at least one number.
-      Make sure you use at least 8 characters, at least one lower case letter,
-      at least one upper case letter and at least one number.
+      ${reminder}
     `);
     return res.render('register.ejs');
   }
