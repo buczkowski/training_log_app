@@ -85,18 +85,20 @@
           <th scope="col"></th>
         </thead>
       </tr>
-        <% for (let completedExercise of exercisesList) { %>
-          <tr>
-            <td><%= completedExercise.exercise %></td>
-            <td><%= completedExercise.sets %></td>
-            <td><%= completedExercise.reps %></td>
-            <td><%= completedExercise.weight %></td>
-            <td><%= completedExercise.date %></td>
-            <form action="/deleteexercise" method="POST">
-              <input hidden name="exerciseId" value="<%= completedExercise.exerciseId %>">
-              <td><button class="btn btn-danger type="submit">Delete</button></td>
-            </form>
-          </tr>
+        <% if (exercisesList) { %>
+          <% for (let completedExercise of exercisesList) { %>
+            <tr>
+              <td><%= completedExercise.exercise %></td>
+              <td><%= completedExercise.sets %></td>
+              <td><%= completedExercise.reps %></td>
+              <td><%= completedExercise.weight %></td>
+              <td><%= completedExercise.date %></td>
+              <form action="/deleteexercise" method="POST">
+                <input hidden name="exerciseId" value="<%= completedExercise.exerciseId %>">
+                <td><button class="btn btn-danger type="submit">Delete</button></td>
+              </form>
+            </tr>
+          <% } %>
         <% } %>
     </table>
     <% if (isPrevious) { %>
