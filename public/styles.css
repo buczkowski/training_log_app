@@ -24,6 +24,12 @@ footer {
   text-align: center;   
   font-size: .75em;
 }
+table {
+  font-size: small;
+}
+.btn-danger {
+  font-size: small;
+}
 .container {
   width: 98%;
   text-align: center;
