@@ -66,7 +66,7 @@ app.get('/', checkAuthenticated, (req, res) => {
   arraySort(completedExercises, 'date', {reverse: true});
 
   //Pagination
-  const pageSize = 10;
+  const pageSize = 15;
   let exercisesArray = [];
   let exercisesList = [];
   let currentPage;
